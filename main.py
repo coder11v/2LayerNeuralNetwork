@@ -80,7 +80,50 @@ def run_digit_classifier():
     print(f"Final accuracy: {train_accuracies[-1]:.4f}")
     print(f"Final loss: {train_losses[-1]:.4f}")
 
-def run_xor_gate():
+def run_logic_gate(gate_type, epochs=100, save_results=False):
+    """
+    Train a neural network to learn basic logic gates (AND/OR)
+    """
+    print(f"\n=== Welcome to the {gate_type} Gate Learning Demo! ===")
+    print("\nWhat's happening here:")
+    print(f"1. Teaching the computer how an {gate_type} gate works")
+    print("2. The computer will learn from examples")
+    print("3. Watch as it gets better over time!")
+    
+    # Create training data based on gate type
+    if gate_type == 'AND':
+        y = np.array([[0], [0], [0], [1]])  # AND gate output
+    else:  # OR gate
+        y = np.array([[0], [1], [1], [1]])  # OR gate output
+    
+    # Input combinations: [0,0], [0,1], [1,0], [1,1]
+    X = np.array([[0,0], [0,1], [1,0], [1,1]])
+    
+    # Create a small neural network
+    nn = NeuralNetwork(input_size=2, hidden_size=4, output_size=1)
+    
+    # Training loop
+    for i in range(epochs):
+        predictions = nn.forward(X)
+        loss, accuracy = nn.backward(X, y)
+        
+        if i % 10 == 0:
+            clear_screen()
+            print(f"🤖 Learning {gate_type} Gate - Step {i}/{epochs}")
+            print(cool_progress_bar(i, epochs))
+            print(f"\n📊 How well is it learning?")
+            print(f"├── 📉 Error: {loss:.4f}")
+            print(f"└── 📈 Accuracy: {accuracy:.4f}")
+    
+    print("\n✨ Training completed!")
+    print(f"\nFinal results for {gate_type} gate:")
+    print("Input 1 | Input 2 | Output")
+    print("-" * 28)
+    predictions = nn.forward(X)
+    for inputs, pred in zip(X, predictions):
+        print(f"   {int(inputs[0])}    |    {int(inputs[1])}    |   {pred[0]:.2f}")
+
+def run_xor_gate(epochs=100, save_results=False):
     print("\n=== Welcome to the Logic Puzzle Learning Demo! ===")
     print("\nWhat's happening here:")
     print("1. We're teaching the computer a simple logic puzzle")
