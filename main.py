@@ -2,6 +2,8 @@ from neural_network import NeuralNetwork
 from data_generator import generate_digit_data
 import numpy as np
 import os
+import csv
+from datetime import datetime
 
 def color_text(text, color_code):
     return f"\033[{color_code}m{text}\033[0m"
@@ -89,6 +91,8 @@ def run_digit_classifier():
     print(f"Final loss: {train_losses[-1]:.4f}")
 
 def run_logic_gate(gate_type, epochs=100, save_results=False):
+    if save_results:
+        results = []
     """
     Train a neural network to learn basic logic gates (AND/OR)
     """
@@ -145,6 +149,8 @@ def run_logic_gate(gate_type, epochs=100, save_results=False):
             print(f"├── 🎯 Current Accuracy: {color_text(f'{accuracy*100:.1f}%', '32')}")
             print(f"├── ⭐ Best Accuracy: {color_text(f'{best_accuracy*100:.1f}%', '36')}")
             print(f"└── 📉 Error Rate: {color_text(f'{loss:.4f}', '35')}")
+            if save_results:
+                results.append([i, loss, accuracy])
             
             # Show prediction preview
             print("\n🔮 Live Predictions:")
@@ -156,6 +162,14 @@ def run_logic_gate(gate_type, epochs=100, save_results=False):
                 color = "32" if result == "✓" else "31"
                 print(f"     {int(inputs[0])}    │    {int(inputs[1])}    │  {color_text(f'{pred[0]:.2f} {result}', color)}")
     
+    if save_results:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"results_{gate_type.lower()}_{timestamp}.csv"
+        with open(filename, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['epoch', 'loss', 'accuracy'])
+            writer.writerows(results)
+        print(f"\n📊 Results saved to {filename}")
     print("\n✨ Training completed!")
     print(f"\nFinal results for {gate_type} gate:")
     print("Input 1 | Input 2 | Output")
