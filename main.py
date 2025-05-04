@@ -3,6 +3,14 @@ from data_generator import generate_digit_data
 import numpy as np
 import os
 
+def color_text(text, color_code):
+    return f"\033[{color_code}m{text}\033[0m"
+
+def cool_progress_bar(progress, total, width=30):
+    filled = int(width * progress // total)
+    bar = '█' * filled + '░' * (width - filled)
+    return f"[{color_text(bar, '36')}] {progress}/{total}"
+
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -49,6 +57,7 @@ def run_digit_classifier():
     print("\nStarting training...")
     print("=" * 50)
 
+    print(color_text("\n🚀 Training started! Hold tight...", "32"))
     for epoch in range(epochs):
         epoch_losses = []
         epoch_accuracies = []
@@ -67,11 +76,14 @@ def run_digit_classifier():
         train_accuracies.append(avg_accuracy)
 
         if epoch % 10 == 0:
-            print(f"Epoch {epoch:3d}/{epochs}")
-            print(f"├── Loss: {avg_loss:.4f}")
-            print(f"├── Accuracy: {avg_accuracy:.4f}")
-            print(f"└── Processed {(epoch+1)*len(X_train)} samples")
-            print("-" * 30)
+            clear_screen()
+            print(color_text(f"🤖 Training Progress - Epoch {epoch}/{epochs}", "33"))
+            print(cool_progress_bar(epoch, epochs))
+            print(f"\n📊 Metrics:")
+            print(color_text(f"├── 📉 Loss: {avg_loss:.4f}", "35"))
+            print(color_text(f"├── 📈 Accuracy: {avg_accuracy:.4f}", "32"))
+            print(color_text(f"└── 🔄 Processed {(epoch+1)*len(X_train)} samples", "36"))
+            print("\n" + "✨" * 20)
 
     print("\nTraining completed!")
     print(f"Final accuracy: {train_accuracies[-1]:.4f}")
@@ -131,12 +143,13 @@ def run_xor_gate():
     nn = XORNeuralNetwork()
     for i in range(1000):
         if i % 100 == 0:
-            print(f"Epoch {i}")
-            print("Input:\n", X)
-            print("Expected Output:\n", y)
-            print("Actual Output:\n", nn.forward(X))
-            print("Loss:", np.mean(np.square(y - nn.forward(X))))
-            print("-" * 30)
+            clear_screen()
+            print(color_text("🧠 XOR Neural Network Training", "33"))
+            print(cool_progress_bar(i, 1000))
+            print(color_text("\n📊 Network Status:", "36"))
+            loss = np.mean(np.square(y - nn.forward(X)))
+            print(color_text(f"└── 📉 Loss: {loss:.6f}", "35"))
+            print("\n" + "✨" * 20)
         nn.train(X, y)
 
     print("\nTraining Complete!")
