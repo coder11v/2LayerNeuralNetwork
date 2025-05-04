@@ -19,9 +19,17 @@ def print_menu():
     print("\nChoose your experiment:")
     
     print(color_text("\n1. AND Gate", "32"))
+    print("   Learn the AND rule: only say YES when BOTH inputs are ON")
+    
     print(color_text("\n2. OR Gate", "32"))
+    print("   Learn the OR rule: say YES when ANY input is ON")
+    
     print(color_text("\n3. XOR Gate", "35"))
+    print("   Learn the XOR puzzle: say YES when inputs are DIFFERENT")
+    
     print(color_text("\n4. Number Recognition", "36"))
+    print("   Learn to recognize numbers from 0-9 patterns")
+    
     print(color_text("\n0. Exit", "31"))
     print("=" * 50)
 
