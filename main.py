@@ -18,26 +18,11 @@ def print_menu():
     print(color_text("\n=== 🤖 Neural Network Learning Lab! ===", "33"))
     print("\nChoose your experiment:")
     
-    print(color_text("\n1. 🔢 Number Recognition (Basic)", "32"))
-    print("   Simple digit recognition (100 epochs)")
-    
-    print(color_text("\n2. 🔢 Number Recognition (Advanced)", "32"))
-    print("   Enhanced digit recognition (1000 epochs)")
-    
-    print(color_text("\n3. 🧮 XOR Gate (Quick Demo)", "35"))
-    print("   Basic logic gate (100 epochs)")
-    
-    print(color_text("\n4. 🧮 XOR Gate (Deep Learning)", "35"))
-    print("   Advanced logic training (1000 epochs)")
-    
-    print(color_text("\n5. 🎯 AND Gate Demo", "36"))
-    print("   Learn AND operation")
-    
-    print(color_text("\n6. 🎯 OR Gate Demo", "36"))
-    print("   Learn OR operation")
-
-    print(color_text("0. Exit", "31"))
-    print("\nTip: Start with option 2 (Logic Puzzle) - it's simpler!")
+    print(color_text("\n1. AND Gate", "32"))
+    print(color_text("\n2. OR Gate", "32"))
+    print(color_text("\n3. XOR Gate", "35"))
+    print(color_text("\n4. Number Recognition", "36"))
+    print(color_text("\n0. Exit", "31"))
     print("=" * 50)
 
 def run_digit_classifier():
@@ -165,25 +150,23 @@ def main():
     while True:
         clear_screen()
         print_menu()
-        epochs = int(input("\nCustom epochs (press Enter for default): ") or "0")
-        choice = input("\nEnter your choice (0-6): ")
-
-        if choice == '1':
-            run_digit_classifier(epochs=epochs or 100)
-        elif choice == '2':
-            run_digit_classifier(epochs=epochs or 1000)
-        elif choice == '3':
-            run_xor_gate(epochs=epochs or 100)
-        elif choice == '4':
-            run_xor_gate(epochs=epochs or 1000)
-        elif choice == '5':
-            run_logic_gate('AND', epochs=epochs or 500)
-        elif choice == '6':
-            run_logic_gate('OR', epochs=epochs or 500)
-                
-        elif choice == '0':
+        choice = input("\nEnter your choice (0-4): ")
+        
+        if choice == '0':
             print(color_text("\nGoodbye! 👋", "31"))
             break
+            
+        epochs = int(input("\nEnter number of epochs: "))
+        save_csv = input("Save results to CSV? (y/n): ").lower() == 'y'
+        
+        if choice == '1':
+            run_logic_gate('AND', epochs=epochs, save_results=save_csv)
+        elif choice == '2':
+            run_logic_gate('OR', epochs=epochs, save_results=save_csv)
+        elif choice == '3':
+            run_xor_gate(epochs=epochs, save_results=save_csv)
+        elif choice == '4':
+            run_digit_classifier(epochs=epochs, save_results=save_csv)
         else:
             print("\nInvalid choice. Please try again.")
 
