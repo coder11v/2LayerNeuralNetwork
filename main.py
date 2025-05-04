@@ -7,8 +7,8 @@ def color_text(text, color_code):
     return f"\033[{color_code}m{text}\033[0m"
 
 def cool_progress_bar(progress, total, width=30):
-    filled = int(width * progress // total)
-    bar = '█' * filled + '░' * (width - filled)
+    filled = int(width * (progress / total))
+    bar = '=' * filled + '>' + ' ' * (width - filled - 1)
     return f"[{color_text(bar, '36')}] {progress}/{total}"
 
 def clear_screen():
@@ -85,10 +85,20 @@ def run_logic_gate(gate_type, epochs=100, save_results=False):
     Train a neural network to learn basic logic gates (AND/OR)
     """
     print(f"\n=== Welcome to the {gate_type} Gate Learning Demo! ===")
-    print("\nWhat's happening here:")
-    print(f"1. Teaching the computer how an {gate_type} gate works")
-    print("2. The computer will learn from examples")
-    print("3. Watch as it gets better over time!")
+    print("\n👋 Hey! Let me explain what's happening:")
+    print(f"1. We're teaching the computer about the {gate_type} gate!")
+    print("   It's like teaching a friend a simple rule:")
+    if gate_type == 'AND':
+        print("   - Only say YES when BOTH inputs are ON (1)")
+        print("   - Otherwise, say NO (0)")
+    else:  # OR gate
+        print("   - Say YES when ANY input is ON (1)")
+        print("   - Only say NO when BOTH are OFF (0)")
+    print("\n2. 🎯 The computer practices with these examples:")
+    print("   - Input 1 and Input 2 can each be ON (1) or OFF (0)")
+    print("\n3. 📈 Watch the magic happen!")
+    print("   - Error gets smaller = Computer is learning!")
+    print("   - Accuracy gets bigger = Computer is getting smarter!")
     
     # Create training data based on gate type
     if gate_type == 'AND':
