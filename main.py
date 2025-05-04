@@ -1,67 +1,154 @@
 from neural_network import NeuralNetwork
 from data_generator import generate_digit_data
 import numpy as np
+import os
 
-def main():
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def print_menu():
+    print("\n=== Neural Network Demonstrations ===")
+    print("1. Digit Classifier Neural Network")
+    print("   - A 2-layer neural network that classifies digits 0-9")
+    print("   - Uses ReLU and Softmax activations")
+    print("   - Demonstrates modern training techniques\n")
+
+    print("2. XOR Gate Neural Network")
+    print("   - Classic XOR gate implementation")
+    print("   - Uses Sigmoid activation")
+    print("   - Demonstrates fundamental concepts\n")
+
+    print("0. Exit")
+    print("=" * 35)
+
+def run_digit_classifier():
+    print("\nStarting Digit Classifier Training...")
+    print("This network will learn to classify digits 0-9")
+    input("Press Enter to begin...")
+
     # Generate training data
     X_train, y_train = generate_digit_data(1000)
-
-    # Create and train network
     nn = NeuralNetwork(input_size=64, hidden_size=128, output_size=10)
 
-    # Training loop
     epochs = 100
     batch_size = 32
-
-    # Lists to store metrics
     train_losses = []
     train_accuracies = []
-    
-    print("Starting training...")
+
+    print("\nStarting training...")
     print("=" * 50)
-    
+
     for epoch in range(epochs):
         epoch_losses = []
         epoch_accuracies = []
-        
-        # Training loop
+
         for i in range(0, len(X_train), batch_size):
             X_batch = X_train[i:i + batch_size]
             y_batch = y_train[i:i + batch_size]
-
-            # Forward pass
             predictions = nn.forward(X_batch)
-            # Backward pass with metrics
             loss, accuracy = nn.backward(X_batch, y_batch)
-            
             epoch_losses.append(loss)
             epoch_accuracies.append(accuracy)
 
-        # Calculate average metrics for the epoch
         avg_loss = np.mean(epoch_losses)
         avg_accuracy = np.mean(epoch_accuracies)
-        
         train_losses.append(avg_loss)
         train_accuracies.append(avg_accuracy)
 
-        # Print detailed progress
         if epoch % 10 == 0:
             print(f"Epoch {epoch:3d}/{epochs}")
             print(f"├── Loss: {avg_loss:.4f}")
             print(f"├── Accuracy: {avg_accuracy:.4f}")
             print(f"└── Processed {(epoch+1)*len(X_train)} samples")
             print("-" * 30)
-    
+
     print("\nTraining completed!")
     print(f"Final accuracy: {train_accuracies[-1]:.4f}")
     print(f"Final loss: {train_losses[-1]:.4f}")
+
+def run_xor_gate():
+    print("\nStarting XOR Gate Neural Network...")
+    print("This network will learn the XOR operation")
+    input("Press Enter to begin...")
+
+    X = np.array(([0,0,0],[0,0,1],[0,1,0],[0,1,1],
+                  [1,0,0],[1,0,1],[1,1,0],[1,1,1]), dtype=float)
+    y = np.array(([1],[0],[0],[0],[0],[0],[0],[1]), dtype=float)
+    xPredicted = np.array(([0,0,1]), dtype=float)
+
+    X = X/np.amax(X, axis=0)
+    xPredicted = xPredicted/np.amax(xPredicted, axis=0)
+
+    class XORNeuralNetwork:
+        def __init__(self):
+            self.inputLayerSize = 3
+            self.outputLayerSize = 1
+            self.hiddenLayerSize = 4
+            self.W1 = np.random.randn(self.inputLayerSize, self.hiddenLayerSize)
+            self.W2 = np.random.randn(self.hiddenLayerSize, self.outputLayerSize)
+
+        def sigmoid(self, s):
+            return 1/(1+np.exp(-s))
+
+        def sigmoid_prime(self, s):
+            return s * (1 - s)
+
+        def forward(self, X):
+            self.z = np.dot(X, self.W1)
+            self.z2 = self.sigmoid(self.z)
+            self.z3 = np.dot(self.z2, self.W2)
+            return self.sigmoid(self.z3)
+
+        def backward(self, X, y, o):
+            self.o_error = y - o
+            self.o_delta = self.o_error * self.sigmoid_prime(o)
+            self.z2_error = self.o_delta.dot(self.W2.T)
+            self.z2_delta = self.z2_error * self.sigmoid_prime(self.z2)
+            self.W1 += X.T.dot(self.z2_delta)
+            self.W2 += self.z2.T.dot(self.o_delta)
+
+        def train(self, X, y):
+            o = self.forward(X)
+            self.backward(X, y, o)
+            return o
+
+    nn = XORNeuralNetwork()
+    for i in range(1000):
+        if i % 100 == 0:
+            print(f"Epoch {i}")
+            print("Input:\n", X)
+            print("Expected Output:\n", y)
+            print("Actual Output:\n", nn.forward(X))
+            print("Loss:", np.mean(np.square(y - nn.forward(X))))
+            print("-" * 30)
+        nn.train(X, y)
+
+    print("\nTraining Complete!")
+    print("Final prediction for [0,0,1]:", nn.forward(xPredicted))
+
+def main():
+    while True:
+        clear_screen()
+        print_menu()
+        choice = input("\nEnter your choice (0-2): ")
+
+        if choice == '1':
+            run_digit_classifier()
+        elif choice == '2':
+            run_xor_gate()
+        elif choice == '0':
+            print("\nGoodbye!")
+            break
+        else:
+            print("\nInvalid choice. Please try again.")
+
+        input("\nPress Enter to continue...")
 
 if __name__ == "__main__":
     main()
 
 """
 # 2 Layer Neural Network in NumPy
-
 
 
 import numpy as np
@@ -187,4 +274,3 @@ for i in range(trainingEpochs): # train myNeuralNetwork 1,000 times
 myNeuralNetwork.saveWeights()
 myNeuralNetwork.predictOutput()
 """
-
