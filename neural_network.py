@@ -42,3 +42,11 @@ class NeuralNetwork:
         self.b2 -= learning_rate * db2
         self.W1 -= learning_rate * dW1
         self.b1 -= learning_rate * db1
+        
+        # Calculate loss and accuracy
+        loss = -np.mean(y * np.log(self.a2 + 1e-8))
+        predictions = np.argmax(self.a2, axis=1)
+        true_labels = np.argmax(y, axis=1)
+        accuracy = np.mean(predictions == true_labels)
+        
+        return loss, accuracy

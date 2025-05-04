@@ -13,21 +13,48 @@ def main():
     epochs = 100
     batch_size = 32
 
+    # Lists to store metrics
+    train_losses = []
+    train_accuracies = []
+    
+    print("Starting training...")
+    print("=" * 50)
+    
     for epoch in range(epochs):
-        # Simple batch training
+        epoch_losses = []
+        epoch_accuracies = []
+        
+        # Training loop
         for i in range(0, len(X_train), batch_size):
             X_batch = X_train[i:i + batch_size]
             y_batch = y_train[i:i + batch_size]
 
-            # Forward and backward pass
+            # Forward pass
             predictions = nn.forward(X_batch)
-            nn.backward(X_batch, y_batch)
+            # Backward pass with metrics
+            loss, accuracy = nn.backward(X_batch, y_batch)
+            
+            epoch_losses.append(loss)
+            epoch_accuracies.append(accuracy)
 
-        # Print progress
+        # Calculate average metrics for the epoch
+        avg_loss = np.mean(epoch_losses)
+        avg_accuracy = np.mean(epoch_accuracies)
+        
+        train_losses.append(avg_loss)
+        train_accuracies.append(avg_accuracy)
+
+        # Print detailed progress
         if epoch % 10 == 0:
-            predictions = nn.forward(X_train)
-            accuracy = np.mean(np.argmax(predictions, axis=1) == np.argmax(y_train, axis=1))
-            print(f"Epoch {epoch}, Accuracy: {accuracy:.4f}")
+            print(f"Epoch {epoch:3d}/{epochs}")
+            print(f"├── Loss: {avg_loss:.4f}")
+            print(f"├── Accuracy: {avg_accuracy:.4f}")
+            print(f"└── Processed {(epoch+1)*len(X_train)} samples")
+            print("-" * 30)
+    
+    print("\nTraining completed!")
+    print(f"Final accuracy: {train_accuracies[-1]:.4f}")
+    print(f"Final loss: {train_losses[-1]:.4f}")
 
 if __name__ == "__main__":
     main()
