@@ -7,24 +7,35 @@ def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def print_menu():
-    print("\n=== Neural Network Demonstrations ===")
-    print("1. Digit Classifier Neural Network")
-    print("   - A 2-layer neural network that classifies digits 0-9")
-    print("   - Uses ReLU and Softmax activations")
-    print("   - Demonstrates modern training techniques\n")
+    print("\n=== Welcome to Neural Network Learning! ===")
+    print("\nWhat would you like to try today?")
+    
+    print("\n1. Number Recognition Network")
+    print("   This is like teaching a computer to recognize numbers!")
+    print("   - The computer learns to identify digits from 0 to 9")
+    print("   - It's similar to how humans learn to recognize numbers")
+    print("   - Watch as it gets better with practice\n")
 
-    print("2. XOR Gate Neural Network")
-    print("   - Classic XOR gate implementation")
-    print("   - Uses Sigmoid activation")
-    print("   - Demonstrates fundamental concepts\n")
+    print("2. Simple Logic Puzzle Network (XOR)")
+    print("   This is like teaching a computer basic logic!")
+    print("   - XOR means 'exclusive OR' - it's a simple yes/no puzzle")
+    print("   - Example: If you have two switches, XOR tells you if")
+    print("     exactly ONE switch is on, but not both\n")
 
-    print("0. Exit")
-    print("=" * 35)
+    print("0. Exit the Program")
+    print("\nTip: Start with option 2 (Logic Puzzle) - it's simpler!")
+    print("=" * 50)
 
 def run_digit_classifier():
-    print("\nStarting Digit Classifier Training...")
-    print("This network will learn to classify digits 0-9")
-    input("Press Enter to begin...")
+    print("\n=== Welcome to the Number Recognition Demo! ===")
+    print("\nWhat's happening here:")
+    print("1. We're teaching the computer to recognize numbers")
+    print("2. It will look at patterns that represent digits 0-9")
+    print("3. Over time, it will get better at guessing which number it sees")
+    print("\nWatch these numbers as the computer learns:")
+    print("- Accuracy: Higher is better (1.0 = perfect)")
+    print("- Loss: Lower is better (0.0 = perfect)")
+    input("\nReady to start? Press Enter to begin...")
 
     # Generate training data
     X_train, y_train = generate_digit_data(1000)
@@ -67,9 +78,14 @@ def run_digit_classifier():
     print(f"Final loss: {train_losses[-1]:.4f}")
 
 def run_xor_gate():
-    print("\nStarting XOR Gate Neural Network...")
-    print("This network will learn the XOR operation")
-    input("Press Enter to begin...")
+    print("\n=== Welcome to the Logic Puzzle Learning Demo! ===")
+    print("\nWhat's happening here:")
+    print("1. We're teaching the computer a simple logic puzzle")
+    print("2. The computer will try to learn when to answer 'yes' or 'no'")
+    print("3. You'll see it practice and get better over time!")
+    print("\nDon't worry about the numbers you'll see - just watch how")
+    print("the 'Loss' number gets smaller as the computer learns!")
+    input("\nReady to start? Press Enter to begin...")
 
     X = np.array(([0,0,0],[0,0,1],[0,1,0],[0,1,1],
                   [1,0,0],[1,0,1],[1,1,0],[1,1,1]), dtype=float)
