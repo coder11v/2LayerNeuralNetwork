@@ -15,22 +15,28 @@ def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def print_menu():
-    print("\n=== Welcome to Neural Network Learning! ===")
-    print("\nWhat would you like to try today?")
+    print(color_text("\n=== 🤖 Neural Network Learning Lab! ===", "33"))
+    print("\nChoose your experiment:")
     
-    print("\n1. Number Recognition Network")
-    print("   This is like teaching a computer to recognize numbers!")
-    print("   - The computer learns to identify digits from 0 to 9")
-    print("   - It's similar to how humans learn to recognize numbers")
-    print("   - Watch as it gets better with practice\n")
+    print(color_text("\n1. 🔢 Number Recognition Network", "32"))
+    print("   Train AI to recognize digits (0-9)")
+    print("   - Watch real-time learning progress")
+    print("   - Get detailed accuracy metrics")
+    print("   - Save training results\n")
 
-    print("2. Simple Logic Puzzle Network (XOR)")
-    print("   This is like teaching a computer basic logic!")
-    print("   - XOR means 'exclusive OR' - it's a simple yes/no puzzle")
-    print("   - Example: If you have two switches, XOR tells you if")
-    print("     exactly ONE switch is on, but not both\n")
+    print(color_text("2. 🧮 Logic Gate Network (XOR)", "35"))
+    print("   Teach AI basic logic operations")
+    print("   - Visual learning progress")
+    print("   - Real-time loss tracking")
+    print("   - Export results to CSV\n")
 
-    print("0. Exit the Program")
+    print(color_text("3. 🎯 Custom Training Session", "36"))
+    print("   Design your own training experiment")
+    print("   - Set custom epochs")
+    print("   - Choose batch size")
+    print("   - Save detailed metrics\n")
+
+    print(color_text("0. Exit", "31"))
     print("\nTip: Start with option 2 (Logic Puzzle) - it's simpler!")
     print("=" * 50)
 
@@ -165,8 +171,27 @@ def main():
             run_digit_classifier()
         elif choice == '2':
             run_xor_gate()
+        elif choice == '3':
+            print(color_text("\n=== Custom Training Session ===", "36"))
+            epochs, batch_size, save_results = get_training_params()
+            
+            print("\nChoose model type:")
+            print("1. Number Recognition")
+            print("2. XOR Gate")
+            model_choice = input("Choice (1-2): ").strip()
+            
+            if model_choice == '1':
+                metrics = run_digit_classifier(epochs=epochs, batch_size=batch_size)
+            else:
+                metrics = run_xor_gate(epochs=epochs)
+                
+            if save_results:
+                filename = save_training_results(metrics, 
+                    "digits" if model_choice == '1' else "xor")
+                print(f"\nResults saved to {filename}")
+                
         elif choice == '0':
-            print("\nGoodbye!")
+            print(color_text("\nGoodbye! 👋", "31"))
             break
         else:
             print("\nInvalid choice. Please try again.")
