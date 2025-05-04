@@ -121,17 +121,34 @@ def run_logic_gate(gate_type, epochs=100, save_results=False):
     nn = NeuralNetwork(input_size=2, hidden_size=4, output_size=1)
     
     # Training loop
+    best_accuracy = 0
     for i in range(epochs):
         predictions = nn.forward(X)
         loss, accuracy = nn.backward(X, y)
         
+        if accuracy > best_accuracy:
+            best_accuracy = accuracy
+        
         if i % 10 == 0:
             clear_screen()
-            print(f"🤖 Learning {gate_type} Gate - Step {i}/{epochs}")
+            print(color_text(f"\n🎯 Training {gate_type} Gate - Round {i}/{epochs}", "33"))
             print(cool_progress_bar(i, epochs))
-            print(f"\n📊 How well is it learning?")
-            print(f"├── 📉 Error: {loss:.4f}")
-            print(f"└── 📈 Accuracy: {accuracy:.4f}")
+            
+            # Show live stats
+            print("\n📊 Live Learning Stats:")
+            print(f"├── 🎯 Current Accuracy: {color_text(f'{accuracy*100:.1f}%', '32')}")
+            print(f"├── ⭐ Best Accuracy: {color_text(f'{best_accuracy*100:.1f}%', '36')}")
+            print(f"└── 📉 Error Rate: {color_text(f'{loss:.4f}', '35')}")
+            
+            # Show prediction preview
+            print("\n🔮 Live Predictions:")
+            print("   Input A │ Input B │ Prediction")
+            print("  ─────────┼─────────┼───────────")
+            current_preds = nn.forward(X)
+            for idx, (inputs, pred) in enumerate(zip(X, current_preds)):
+                result = "✓" if (pred > 0.5) == (y[idx] > 0.5) else "✗"
+                color = "32" if result == "✓" else "31"
+                print(f"     {int(inputs[0])}    │    {int(inputs[1])}    │  {color_text(f'{pred[0]:.2f} {result}', color)}")
     
     print("\n✨ Training completed!")
     print(f"\nFinal results for {gate_type} gate:")
