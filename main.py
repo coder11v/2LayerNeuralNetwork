@@ -122,6 +122,9 @@ def run_logic_gate(gate_type, epochs=100, save_results=False):
     
     # Training loop
     best_accuracy = 0
+    last_update = 0
+    import time
+    
     for i in range(epochs):
         predictions = nn.forward(X)
         loss, accuracy = nn.backward(X, y)
@@ -129,7 +132,10 @@ def run_logic_gate(gate_type, epochs=100, save_results=False):
         if accuracy > best_accuracy:
             best_accuracy = accuracy
         
-        if i % 10 == 0:
+        # Update more frequently but avoid screen flicker
+        current_time = time.time()
+        if current_time - last_update > 0.1:  # Update every 0.1 seconds
+            last_update = current_time
             clear_screen()
             print(color_text(f"\n🎯 Training {gate_type} Gate - Round {i}/{epochs}", "33"))
             print(cool_progress_bar(i, epochs))
